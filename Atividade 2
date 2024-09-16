@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/number1EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite o primeiro número"
+        android:inputType="numberDecimal"
+        android:layout_alignParentTop="true"/>
+
+    <EditText
+        android:id="@+id/number2EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite o segundo número"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/number1EditText"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Somar"
+        android:layout_below="@id/number2EditText"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/subtractButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subtrair"
+        android:layout_toRightOf="@id/addButton"
+        android:layout_marginStart="16dp"
+        android:layout_below="@id/number2EditText"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_below="@id/addButton"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"/>
+</RelativeLayout>
+
+package com.example.simplecalculator
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val number1EditText = findViewById<EditText>(R.id.number1EditText)
+        val number2EditText = findViewById<EditText>(R.id.number2EditText)
+        val addButton = findViewById<Button>(R.id.addButton)
+        val subtractButton = findViewById<Button>(R.id.subtractButton)
+        val resultTextView = findViewById<TextView>(R.id.resultTextView)
+
+        addButton.setOnClickListener {
+            val num1 = number1EditText.text.toString()
+            val num2 = number2EditText.text.toString()
+
+            if (num1.isNotEmpty() && num2.isNotEmpty()) {
+                val sum = num1.toDouble() + num2.toDouble()
+                resultTextView.text = "Resultado: $sum"
+            } else {
+                resultTextView.text = "Por favor, insira ambos os números."
+            }
+        }
+
+        subtractButton.setOnClickListener {
+            val num1 = number1EditText.text.toString()
+            val num2 = number2EditText.text.toString()
+
+            if (num1.isNotEmpty() && num2.isNotEmpty()) {
+                val difference = num1.toDouble() - num2.toDouble()
+                resultTextView.text = "Resultado: $difference"
+            } else {
+                resultTextView.text = "Por favor, insira ambos os números."
+            }
+        }
+    }
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.simplecalculator">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SimpleCalculator">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
