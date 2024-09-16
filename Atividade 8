@@ -1,0 +1,97 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/temperatureEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite a temperatura"
+        android:inputType="numberDecimal" />
+
+    <RadioGroup
+        android:id="@+id/conversionRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
+
+        <RadioButton
+            android:id="@+id/toFahrenheitRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Celsius para Fahrenheit" />
+
+        <RadioButton
+            android:id="@+id/toCelsiusRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fahrenheit para Celsius" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/convertButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Converter"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+</LinearLayout>
+
+
+package com.example.temperatureconverter
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val temperatureEditText = findViewById<EditText>(R.id.temperatureEditText)
+        val toFahrenheitRadioButton = findViewById<RadioButton>(R.id.toFahrenheitRadioButton)
+        val toCelsiusRadioButton = findViewById<RadioButton>(R.id.toCelsiusRadioButton)
+        val convertButton = findViewById<Button>(R.id.convertButton)
+        val resultTextView = findViewById<TextView>(R.id.resultTextView)
+
+        convertButton.setOnClickListener {
+            val inputTemperature = temperatureEditText.text.toString().toDoubleOrNull()
+            if (inputTemperature != null) {
+                val result = if (toFahrenheitRadioButton.isChecked) {
+                    (inputTemperature * 9 / 5) + 32
+                } else if (toCelsiusRadioButton.isChecked) {
+                    // Fahrenheit para Celsius
+                    (inputTemperature - 32) * 5 / 9
+                } else {
+                    null
+                }
+
+                if (result != null) {
+                    resultTextView.text = "Resultado: %.2f".format(result)
+                } else {
+                    resultTextView.text = "Por favor, selecione um tipo de conversão."
+                }
+            } else {
+                // Se a entrada for inválida, exibir uma mensagem de erro
+                resultTextView.text = "Por favor, insira uma temperatura válida."
+            }
+        }
+    }
+}
