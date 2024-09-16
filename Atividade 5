@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/heightEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite a altura (em metros)"
+        android:inputType="numberDecimal"
+        android:layout_alignParentTop="true"/>
+
+    <EditText
+        android:id="@+id/weightEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite o peso (em kg)"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/heightEditText"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/calculateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calcular IMC"
+        android:layout_below="@id/weightEditText"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_below="@id/calculateButton"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"/>
+</RelativeLayout>
+
+
+package com.example.imccalculator
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val heightEditText = findViewById<EditText>(R.id.heightEditText)
+        val weightEditText = findViewById<EditText>(R.id.weightEditText)
+        val calculateButton = findViewById<Button>(R.id.calculateButton)
+        val resultTextView = findViewById<TextView>(R.id.resultTextView)
+
+        calculateButton.setOnClickListener {
+            val heightText = heightEditText.text.toString()
+            val weightText = weightEditText.text.toString()
+
+            if (heightText.isNotEmpty() && weightText.isNotEmpty()) {
+                try {
+                    val height = heightText.toDouble()
+                    val weight = weightText.toDouble()
+
+                    if (height > 0) {
+                        val imc = weight / (height * height)
+                        val category = when {
+                            imc < 18.5 -> "Abaixo do peso"
+                            imc in 18.5..24.9 -> "Peso normal"
+                            imc in 25.0..29.9 -> "Sobrepeso"
+                            else -> "Obesidade"
+                        }
+                        resultTextView.text = "IMC: ${"%.2f".format(imc)}\nCategoria: $category"
+                    } else {
+                        resultTextView.text = "A altura deve ser maior que zero."
+                    }
+                } catch (e: NumberFormatException) {
+                    resultTextView.text = "Insira valores válidos para altura e peso."
+                }
+            } else {
+                resultTextView.text = "Por favor, preencha ambos os campos."
+            }
+        }
+    }
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.imccalculator">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.IMCCalculator">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
