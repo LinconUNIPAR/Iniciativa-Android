@@ -1,0 +1,83 @@
+package com.example.guessthenumber
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import kotlin.random.Random
+
+class MainActivity : AppCompatActivity() {
+
+    private var numeroAleatorio: Int = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+
+        val palpiteEditText = findViewById<EditText>(R.id.guessEditText)
+        val verificarButton = findViewById<Button>(R.id.checkButton)
+        val resultadoTextView = findViewById<TextView>(R.id.resultTextView)
+
+      
+        numeroAleatorio = Random.nextInt(1, 101)
+
+        verificarButton.setOnClickListener {
+            // Pegar o palpite digitado
+            val palpite = palpiteEditText.text.toString().toIntOrNull()
+
+
+            if (palpite != null) {
+                if (palpite < numeroAleatorio) {
+                    resultadoTextView.text = "Seu palpite é muito baixo."
+                } else if (palpite > numeroAleatorio) {
+                    resultadoTextView.text = "Seu palpite é muito alto."
+                } else {
+                    resultadoTextView.text = "Parabéns! Você acertou."
+                }
+            } else {
+                resultadoTextView.text = "Por favor, insira um número válido."
+            }
+        }
+    }
+}
+
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/guessEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite seu palpite (1-100)"
+        android:inputType="number"
+        android:layout_alignParentTop="true"/>
+
+    <Button
+        android:id="@+id/checkButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Verificar Palpite"
+        android:layout_below="@id/guessEditText"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_below="@id/checkButton"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"/>
+</RelativeLayout>
+
+
+
+
