@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/valueEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite o valor a ser convertido"
+        android:inputType="numberDecimal"
+        android:layout_alignParentTop="true"/>
+
+    <EditText
+        android:id="@+id/conversionRateEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite a taxa de conversão (ex.: 5.00)"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/valueEditText"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/convertButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Converter"
+        android:layout_below="@id/conversionRateEditText"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_below="@id/convertButton"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"/>
+</RelativeLayout>
+
+package com.example.currencyconverter
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val valueEditText = findViewById<EditText>(R.id.valueEditText)
+        val conversionRateEditText = findViewById<EditText>(R.id.conversionRateEditText)
+        val convertButton = findViewById<Button>(R.id.convertButton)
+        val resultTextView = findViewById<TextView>(R.id.resultTextView)
+
+        convertButton.setOnClickListener {
+            val valueText = valueEditText.text.toString()
+            val conversionRateText = conversionRateEditText.text.toString()
+
+            if (valueText.isNotEmpty() && conversionRateText.isNotEmpty()) {
+                try {
+                    val value = valueText.toDouble()
+                    val conversionRate = conversionRateText.toDouble()
+                    val convertedValue = value * conversionRate
+                    resultTextView.text = "Valor convertido: $convertedValue"
+                } catch (e: NumberFormatException) {
+                    resultTextView.text = "Insira valores válidos."
+                }
+            } else {
+                resultTextView.text = "Por favor, preencha ambos os campos."
+            }
+        }
+    }
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.currencyconverter">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CurrencyConverter">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
