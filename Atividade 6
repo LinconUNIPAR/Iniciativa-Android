@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/billAmountEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite o valor da conta"
+        android:inputType="numberDecimal"
+        android:layout_alignParentTop="true"/>
+
+    <EditText
+        android:id="@+id/tipPercentageEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite a porcentagem da gorjeta (ex.: 10, 15, 20)"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/billAmountEditText"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/calculateTipButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calcular Gorjeta"
+        android:layout_below="@id/tipPercentageEditText"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_below="@id/calculateTipButton"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"/>
+</RelativeLayout>
+
+
+package com.example.tipcalculator
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val billAmountEditText = findViewById<EditText>(R.id.billAmountEditText)
+        val tipPercentageEditText = findViewById<EditText>(R.id.tipPercentageEditText)
+        val calculateTipButton = findViewById<Button>(R.id.calculateTipButton)
+        val resultTextView = findViewById<TextView>(R.id.resultTextView)
+
+        calculateTipButton.setOnClickListener {
+            val billAmountText = billAmountEditText.text.toString()
+            val tipPercentageText = tipPercentageEditText.text.toString()
+
+            if (billAmountText.isNotEmpty() && tipPercentageText.isNotEmpty()) {
+                try {
+                    val billAmount = billAmountText.toDouble()
+                    val tipPercentage = tipPercentageText.toDouble()
+
+                    if (billAmount >= 0 && tipPercentage >= 0) {
+                        val tip = billAmount * (tipPercentage / 100)
+                        val total = billAmount + tip
+                        resultTextView.text = "Gorjeta: ${"%.2f".format(tip)}\nTotal: ${"%.2f".format(total)}"
+                    } else {
+                        resultTextView.text = "O valor da conta e a porcentagem devem ser positivos."
+                    }
+                } catch (e: NumberFormatException) {
+                    resultTextView.text = "Insira valores válidos para a conta e a porcentagem."
+                }
+            } else {
+                resultTextView.text = "Por favor, preencha ambos os campos."
+            }
+        }
+    }
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.tipcalculator">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TipCalculator">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
